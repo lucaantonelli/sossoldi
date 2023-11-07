@@ -1,5 +1,7 @@
 // Settings page.
 
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../custom_widgets/default_container.dart';
@@ -54,7 +56,7 @@ var settingsOptions = const [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    null,
+    "/notifications-settings",
   ],
   [
     Icons.info,
@@ -68,34 +70,49 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
-        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0XFF7DA1C4),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           onPressed: () {
             Navigator.pop(context);
-            // Return to previous page
           },
-        ),
-        title: Text(
-          'Settings',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.settings,
+                      size: 28.0,
+                      color: Theme.of(context).colorScheme.background,
+                    ),
+                  ),
+                  const SizedBox(width: 12.0),
+                  Text(
+                    "Settings",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+              ),
             ),
             ListView.separated(
               itemCount: settingsOptions.length,
@@ -125,27 +142,29 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                       ),
                       const SizedBox(width: 12.0),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            setting[1].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Theme.of(context).colorScheme.primary),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            setting[2].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Theme.of(context).colorScheme.primary),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              setting[1].toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                            ),
+                            Text(
+                              setting[2].toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: Theme.of(context).colorScheme.primary),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -156,52 +175,53 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ),
       ),
       bottomSheet: Container(
-          color: Colors.deepOrangeAccent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              const Text(
-                '[DEV ONLY]\nDANGEROUS\nZONE',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.yellowAccent,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 3.0,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
+        color: Colors.deepOrangeAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            const Text(
+              '[DEV ONLY]\nDANGEROUS\nZONE',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.yellowAccent,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                child: const Text('CLEAR DB'),
-                onPressed: () async {
-                  await SossoldiDatabase.instance.clearDatabase().then((v) {
-                    ref.refresh(accountsProvider);
-                    ref.refresh(categoriesProvider);
-                    ref.refresh(transactionsProvider);
-                    ref.refresh(budgetsProvider);
-                    showSuccessDialog(context, "DB Cleared");
-                  });
-                },
-              ),
-              ElevatedButton(
-                child: const Text('CLEAR AND FILL DEMO DATA'),
-                onPressed: () async {
-                  await SossoldiDatabase.instance.clearDatabase();
-                  await SossoldiDatabase.instance.fillDemoData().then((value) {
-                    ref.refresh(accountsProvider);
-                    ref.refresh(categoriesProvider);
-                    ref.refresh(transactionsProvider);
-                    ref.refresh(budgetsProvider);
-                    showSuccessDialog(context, "DB Cleared, and DEMO data added");
-                  });
-                },
-              ),
-            ],
-          )),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR DB'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase().then((v) {
+                  ref.refresh(accountsProvider);
+                  ref.refresh(categoriesProvider);
+                  ref.refresh(transactionsProvider);
+                  ref.refresh(budgetsProvider);
+                  showSuccessDialog(context, "DB Cleared");
+                });
+              },
+            ),
+            ElevatedButton(
+              child: const Text('CLEAR AND FILL DEMO DATA'),
+              onPressed: () async {
+                await SossoldiDatabase.instance.clearDatabase();
+                await SossoldiDatabase.instance.fillDemoData().then((value) {
+                  ref.refresh(accountsProvider);
+                  ref.refresh(categoriesProvider);
+                  ref.refresh(transactionsProvider);
+                  ref.refresh(budgetsProvider);
+                  showSuccessDialog(context, "DB Cleared, and DEMO data added");
+                });
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
