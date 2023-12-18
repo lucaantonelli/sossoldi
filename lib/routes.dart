@@ -1,17 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/account_page/account_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'pages/accounts/account_list.dart';
 import 'pages/accounts/add_account.dart';
-import 'pages/add_page/add_page.dart';
+import 'pages/add_page/widgets/account_selector.dart';
+import 'pages/add_page/widgets/category_selector.dart';
+import 'pages/add_page/widgets/recurrence_selector.dart';
 import 'pages/categories/add_category.dart';
 import 'pages/categories/category_list.dart';
-import 'pages/home_page.dart';
 import 'pages/general_options/general_settings.dart';
+import 'pages/home_page.dart';
 import 'pages/more_info_page/collaborators_page.dart';
 import 'pages/more_info_page/more_info.dart';
 import 'pages/more_info_page/privacy_policy.dart';
+import 'pages/notifications/notifications_settings.dart';
 import 'pages/planning_page/planning_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/statistics_page.dart';
@@ -52,6 +56,8 @@ Route<dynamic> makeRoute(RouteSettings settings) {
       return _noTransitionPageRoute(settings.name, const SettingsPage());
     case '/general-settings':
       return _noTransitionPageRoute(settings.name, const GeneralSettingsPage());
+    case '/notifications-settings':
+      return _noTransitionPageRoute(settings.name, const NotificationsSettings());
     default:
       throw 'Route is not defined';
   }
