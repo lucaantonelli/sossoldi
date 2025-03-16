@@ -20,7 +20,7 @@ final transactionTypeList = Provider<List<TransactionType>>(
 final transactionTypeProvider = StateProvider<TransactionType>((ref) => TransactionType.expense);
 final bankAccountTransferProvider = StateProvider<BankAccount?>((ref) => null);
 // Used as from account in transfer transactions
-final bankAccountProvider = StateProvider<BankAccount?>((ref) => ref.read(mainAccountProvider));
+final bankAccountProvider = StateProvider<BankAccount?>((ref) => ref.watch(mainAccountProvider));
 final dateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 final categoryProvider = StateProvider<CategoryTransaction?>((ref) => null);
 
