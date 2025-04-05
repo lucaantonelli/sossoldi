@@ -14,16 +14,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Flutter
+      - name: Setup FVM
+        uses: kuhnroyal/flutter-fvm-config-action/config@v3
+        id: fvm-config-action
+
+      - name: Flutter action
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
           channel: stable
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
 
       - name: Run dart format check
         run: |
           echo "Checking code formatting (default line length 80)..."
           if ! dart format --set-exit-if-changed --output=none .; then
-            echo "⛔ ERROR: Code format check failed. Please run 'dart format .' on your code and commit the formatted changes."
+            echo "⛔ ERROR: Code format check failed. Please run 'fvm dart format .' on your code and commit the formatted changes."
             exit 1
           else
             echo "✅ Code format check passed."
