@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup FVM
         uses: kuhnroyal/flutter-fvm-config-action/config@v3
@@ -26,6 +26,15 @@ jobs:
           cache: true
           cache-key: flutter
           cache-path: ${{ runner.tool_cache }}/flutter
+
+      - name: Debug line endings
+        run: |
+          find . -type f -exec file {} +
+
+      - name: Debug unformatted files
+        run: |
+          echo "Checking which files need formatting..."
+          dart format --output=show .
 
       - name: Run dart format check
         run: |
