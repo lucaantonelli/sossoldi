@@ -9,11 +9,8 @@ import '../../../model/transaction.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
-import 'account_list_tile.dart';
 import 'accounts_pie_chart.dart';
-
-final selectedAccountIndexProvider =
-    StateProvider.autoDispose<int>((ref) => -1);
+import 'panel_list_tile.dart';
 
 class AccountsTab extends ConsumerStatefulWidget {
   const AccountsTab({
@@ -118,23 +115,22 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(height: 10),
                                 itemBuilder: (context, index) {
-                                  BankAccount b = accountIncomeList[index];
-                                  return AccountListTile(
-                                    title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsIncome[b.id]
-                                                ?.length ??
-                                            0,
-                                    transactions:
-                                        accountToTransactionsIncome[b.id] ?? [],
-                                    amount: accountToAmountIncome[b.id] ?? 0,
+                                  BankAccount account =
+                                      accountIncomeList[index];
+                                  return PanelListTile(
+                                    name: account.name,
+                                    color: accountColorList[account.color],
+                                    icon: accountIconList[account.symbol],
+                                    transactions: accountToTransactionsIncome[
+                                            account.id] ??
+                                        [],
+                                    amount:
+                                        accountToAmountIncome[account.id] ?? 0,
                                     percent:
-                                        (accountToAmountIncome[b.id] ?? 0) /
+                                        (accountToAmountIncome[account.id] ??
+                                                0) /
                                             totalIncome *
                                             100,
-                                    color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ??
-                                        Icons.swap_horiz_rounded,
                                     index: index,
                                   );
                                 },
@@ -163,24 +159,22 @@ class _AccountsTabState extends ConsumerState<AccountsTab> {
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(height: Sizes.sm),
                                 itemBuilder: (context, index) {
-                                  BankAccount b = accountExpenseList[index];
-                                  return AccountListTile(
-                                    title: b.name,
-                                    nTransactions:
-                                        accountToTransactionsExpense[b.id]
-                                                ?.length ??
-                                            0,
-                                    transactions:
-                                        accountToTransactionsExpense[b.id] ??
-                                            [],
-                                    amount: accountToAmountExpense[b.id] ?? 0,
+                                  BankAccount account =
+                                      accountExpenseList[index];
+                                  return PanelListTile(
+                                    name: account.name,
+                                    color: accountColorList[account.color],
+                                    icon: accountIconList[account.symbol],
+                                    transactions: accountToTransactionsExpense[
+                                            account.id] ??
+                                        [],
+                                    amount:
+                                        accountToAmountExpense[account.id] ?? 0,
                                     percent:
-                                        (accountToAmountExpense[b.id] ?? 0) /
+                                        (accountToAmountExpense[account.id] ??
+                                                0) /
                                             totalExpense *
                                             100,
-                                    color: accountColorList[b.color],
-                                    icon: accountIconList[b.symbol] ??
-                                        Icons.swap_horiz_rounded,
                                     index: index,
                                   );
                                 },
