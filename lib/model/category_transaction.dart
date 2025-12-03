@@ -1,4 +1,3 @@
-import '../services/database/sossoldi_database.dart';
 import 'base_entity.dart';
 import 'transaction.dart';
 
@@ -28,12 +27,31 @@ class CategoryTransactionFields extends BaseEntityFields {
   ];
 }
 
-enum CategoryTransactionType { income, expense }
+enum CategoryTransactionType {
+  income,
+  expense;
 
-Map<String, CategoryTransactionType> categoryTypeMap = {
-  "IN": CategoryTransactionType.income,
-  "OUT": CategoryTransactionType.expense,
-};
+  String get label => switch (this) {
+    CategoryTransactionType.income => "IN",
+    CategoryTransactionType.expense => "OUT",
+  };
+
+  TransactionType get transactionType => switch (this) {
+    CategoryTransactionType.income => TransactionType.income,
+    CategoryTransactionType.expense => TransactionType.expense,
+  };
+
+  static CategoryTransactionType fromJson(dynamic value) {
+    switch (value) {
+      case "IN":
+        return CategoryTransactionType.income;
+      case "OUT":
+        return CategoryTransactionType.expense;
+      default:
+        throw ArgumentError('Invalid : $value');
+    }
+  }
+}
 
 class CategoryTransaction extends BaseEntity {
   final String name;
@@ -81,7 +99,9 @@ class CategoryTransaction extends BaseEntity {
       CategoryTransaction(
         id: json[BaseEntityFields.id] as int?,
         name: json[CategoryTransactionFields.name] as String,
-        type: categoryTypeMap[json[CategoryTransactionFields.type] as String]!,
+        type: CategoryTransactionType.fromJson(
+          json[CategoryTransactionFields.type],
+        ),
         symbol: json[CategoryTransactionFields.symbol] as String,
         color: json[CategoryTransactionFields.color] as int,
         note: json[CategoryTransactionFields.note] as String?,
@@ -93,9 +113,7 @@ class CategoryTransaction extends BaseEntity {
   Map<String, Object?> toJson({bool update = false}) => {
     BaseEntityFields.id: id,
     CategoryTransactionFields.name: name,
-    CategoryTransactionFields.type: categoryTypeMap.keys.firstWhere(
-      (k) => categoryTypeMap[k] == type,
-    ),
+    CategoryTransactionFields.type: type.label,
     CategoryTransactionFields.symbol: symbol,
     CategoryTransactionFields.color: color,
     CategoryTransactionFields.note: note,
@@ -105,108 +123,4 @@ class CategoryTransaction extends BaseEntity {
         : DateTime.now().toIso8601String(),
     BaseEntityFields.updatedAt: DateTime.now().toIso8601String(),
   };
-}
-
-class CategoryTransactionMethods extends SossoldiDatabase {
-  final orderByASC = '${CategoryTransactionFields.createdAt} ASC';
-
-  Future<CategoryTransaction> insert(CategoryTransaction item) async {
-    final db = await database;
-    final id = await db.insert(categoryTransactionTable, item.toJson());
-    return item.copy(id: id);
-  }
-
-  Future<CategoryTransaction> selectById(int id) async {
-    final db = await database;
-
-    final maps = await db.query(
-      categoryTransactionTable,
-      columns: CategoryTransactionFields.allFields,
-      where: '${CategoryTransactionFields.id} = ?',
-      whereArgs: [id],
-    );
-
-    if (maps.isNotEmpty) {
-      return CategoryTransaction.fromJson(maps.first);
-    } else {
-      throw Exception('ID $id not found');
-    }
-  }
-
-  Future<List<CategoryTransaction>> selectAll() async {
-    final db = await database;
-
-    final result = await db.query(
-      categoryTransactionTable,
-      orderBy: orderByASC,
-    );
-
-    return result.map((json) => CategoryTransaction.fromJson(json)).toList();
-  }
-
-  Future<List<CategoryTransaction>> selectCategoriesByType(
-    CategoryTransactionType type,
-  ) async {
-    final db = await database;
-
-    var key = categoryTypeMap.entries
-        .firstWhere((entry) => entry.value == type)
-        .key;
-
-    final result = await db.query(
-      categoryTransactionTable,
-      columns: CategoryTransactionFields.allFields,
-      where: '${CategoryTransactionFields.type} = ?',
-      whereArgs: [key],
-      orderBy: orderByASC,
-    );
-
-    if (result.isNotEmpty) {
-      return result.map((json) => CategoryTransaction.fromJson(json)).toList();
-    } else {
-      return [];
-    }
-  }
-
-  Future<int> updateItem(CategoryTransaction item) async {
-    final db = await database;
-
-    // You can use `rawUpdate` to write the query in SQL
-    return db.update(
-      categoryTransactionTable,
-      item.toJson(update: true),
-      where: '${CategoryTransactionFields.id} = ?',
-      whereArgs: [item.id],
-    );
-  }
-
-  Future<int> deleteById(int id) async {
-    final db = await database;
-
-    return await db.delete(
-      categoryTransactionTable,
-      where: '${CategoryTransactionFields.id} = ?',
-      whereArgs: [id],
-    );
-  }
-
-  CategoryTransactionType? transactionToCategoryType(TransactionType type) {
-    switch (type) {
-      case TransactionType.income:
-        return CategoryTransactionType.income;
-      case TransactionType.expense:
-        return CategoryTransactionType.expense;
-      case TransactionType.transfer:
-        return null;
-    }
-  }
-
-  TransactionType categoryToTransactionType(CategoryTransactionType type) {
-    switch (type) {
-      case CategoryTransactionType.income:
-        return TransactionType.income;
-      case CategoryTransactionType.expense:
-        return TransactionType.expense;
-    }
-  }
 }

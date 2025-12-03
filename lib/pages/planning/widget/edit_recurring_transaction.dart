@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../providers/transactions_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
@@ -61,29 +62,26 @@ class _EditRecurringTransactionState
           child: const Text('Cancel'),
         ),
         actions: [
-          selectedRecurringTransaction != null
-              ? Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    onPressed: () async {
-                      ref
-                          .read(transactionsProvider.notifier)
-                          .deleteRecurringTransaction(
-                            selectedRecurringTransaction.id!,
-                          )
-                          .whenComplete(() {
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          });
-                    },
-                  ),
-                )
-              : const SizedBox(),
+          if (selectedRecurringTransaction != null)
+            Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                onPressed: () async {
+                  ref
+                      .read(recurringTransactionProvider.notifier)
+                      .delete(selectedRecurringTransaction.id!)
+                      .whenComplete(() {
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      });
+                },
+              ),
+            ),
         ],
       ),
       body: Stack(
@@ -116,7 +114,7 @@ class _EditRecurringTransactionState
                       DetailsListTile(
                         title: "Account",
                         icon: Icons.account_balance_wallet,
-                        value: ref.watch(bankAccountProvider)?.name,
+                        value: ref.watch(selectedBankAccountProvider)?.name,
                         callback: () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           showModalBottomSheet(
@@ -145,13 +143,13 @@ class _EditRecurringTransactionState
                       NonEditableDetailsListTile(
                         title: "Category",
                         icon: Icons.list_alt,
-                        value: ref.watch(categoryProvider)?.name,
+                        value: ref.watch(selectedCategoryProvider)?.name,
                       ),
                       const Divider(height: 1, color: grey1),
                       NonEditableDetailsListTile(
                         title: "Date Start",
                         icon: Icons.calendar_month,
-                        value: ref.watch(dateProvider).formatEDMY(),
+                        value: ref.watch(selectedDateProvider).formatEDMY(),
                       ),
                       const RecurrenceListTileEdit(),
                     ],
@@ -190,8 +188,8 @@ class _EditRecurringTransactionState
                 child: TextButton(
                   onPressed: () {
                     ref
-                        .read(transactionsProvider.notifier)
-                        .updateRecurringTransaction(
+                        .read(recurringTransactionProvider.notifier)
+                        .update(
                           amountController.text.toNum(),
                           noteController.text,
                         )

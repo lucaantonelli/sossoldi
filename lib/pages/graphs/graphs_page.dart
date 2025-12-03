@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants/style.dart';
 import '../../ui/extensions.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../model/transaction.dart';
@@ -25,7 +24,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
     final currentYearMonthlyTransactions = ref.watch(
       currentYearMontlyTransactionsProvider,
     );
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
 
     return ListView(
       children: [
@@ -93,8 +92,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                           ),
                                     ),
                                     TextSpan(
-                                      text:
-                                          currencyState.selectedCurrency.symbol,
+                                      text: currencyState.symbol,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge
@@ -127,9 +125,7 @@ class _GraphsPageState extends ConsumerState<GraphsPage> {
                                   "${percentGainLoss.toCurrency()}%",
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
-                                        color: percentGainLoss < 0
-                                            ? red
-                                            : green,
+                                        color: percentGainLoss.toColor(),
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),

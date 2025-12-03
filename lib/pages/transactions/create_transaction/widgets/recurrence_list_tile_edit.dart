@@ -7,7 +7,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../../../../constants/style.dart";
 import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
-import '../../../../model/transaction.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
 import 'recurrence_selector.dart';
@@ -17,7 +16,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateNotifier).isDarkModeEnabled;
+    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     final isRecurring = ref.watch(selectedRecurringPayProvider);
     final endDate = ref.watch(endDateProvider);
 
@@ -69,7 +68,7 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    recurrenceMap[ref.watch(intervalProvider)]!.label,
+                    ref.watch(intervalProvider).label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: isDarkMode
                           ? grey3
@@ -153,9 +152,9 @@ class EndDateSelector extends ConsumerWidget {
                 ? null
                 : const Icon(Icons.check),
             title: const Text("Never"),
-            onTap: () => {
-              ref.read(endDateProvider.notifier).state = null,
-              Navigator.pop(context),
+            onTap: () {
+              ref.read(endDateProvider.notifier).setDate();
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -166,7 +165,7 @@ class EndDateSelector extends ConsumerWidget {
                 : null,
             subtitle: Text(
               ref.read(endDateProvider) != null
-                  ? ref.read(endDateProvider.notifier).state!.formatEDMY()
+                  ? ref.read(endDateProvider)!.formatEDMY()
                   : '',
             ),
             onTap: () async {
@@ -182,8 +181,9 @@ class EndDateSelector extends ConsumerWidget {
                       minimumYear: 2015,
                       maximumYear: 2050,
                       mode: CupertinoDatePickerMode.date,
-                      onDateTimeChanged: (date) =>
-                          ref.read(endDateProvider.notifier).state = date,
+                      onDateTimeChanged: (date) => ref
+                          .read(endDateProvider.notifier)
+                          .setDate(date: date),
                     ),
                   ),
                 );
@@ -195,7 +195,7 @@ class EndDateSelector extends ConsumerWidget {
                   lastDate: DateTime(2050),
                 );
                 if (pickedDate != null) {
-                  ref.read(endDateProvider.notifier).state = pickedDate;
+                  ref.read(endDateProvider.notifier).setDate(date: pickedDate);
                 }
               }
             },

@@ -42,7 +42,12 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
-    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
+    assert(
+      c.type ==
+          CategoryTransactionType.fromJson(
+            json[CategoryTransactionFields.type],
+          ),
+    );
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);
@@ -70,7 +75,12 @@ void main() {
 
     assert(c.id == json[BaseEntityFields.id]);
     assert(c.name == json[CategoryTransactionFields.name]);
-    assert(c.type == categoryTypeMap[json[CategoryTransactionFields.type]]);
+    assert(
+      c.type ==
+          CategoryTransactionType.fromJson(
+            json[CategoryTransactionFields.type],
+          ),
+    );
     assert(c.symbol == json[CategoryTransactionFields.symbol]);
     assert(c.color == json[CategoryTransactionFields.color]);
     assert(c.note == json[CategoryTransactionFields.note]);

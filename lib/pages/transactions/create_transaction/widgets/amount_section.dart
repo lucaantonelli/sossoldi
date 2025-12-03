@@ -3,7 +3,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import '../../../../constants/constants.dart';
 import "../../../../constants/style.dart";
-import '../../../../ui/extensions.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/transaction.dart';
 import '../../../../providers/transactions_provider.dart';
@@ -28,7 +27,7 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
 
   @override
   void initState() {
-    final selectedType = ref.read(transactionTypeProvider);
+    final selectedType = ref.read(selectedTransactionTypeProvider);
     setState(() {
       if (selectedType == TransactionType.income) {
         _typeToggleState = [true, false, false];
@@ -41,8 +40,8 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
 
   @override
   Widget build(BuildContext context) {
-    final trsncTypeList = ref.watch(transactionTypeList);
-    final selectedType = ref.watch(transactionTypeProvider);
+    final trsncTypeList = TransactionType.values;
+    final selectedType = ref.watch(selectedTransactionTypeProvider);
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -63,7 +62,9 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                 for (TransactionType type in trsncTypeList) {
                   if (type == trsncTypeList[index]) {
                     newSelection.add(true);
-                    ref.read(transactionTypeProvider.notifier).state = type;
+                    ref
+                        .read(selectedTransactionTypeProvider.notifier)
+                        .setType(type);
                   } else {
                     newSelection.add(false);
                   }
@@ -171,20 +172,28 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                     RoundedIcon(
                                       icon:
                                           ref
-                                                  .watch(bankAccountProvider)
+                                                  .watch(
+                                                    selectedBankAccountProvider,
+                                                  )
                                                   ?.symbol !=
                                               null
                                           ? accountIconList[ref
-                                                .watch(bankAccountProvider)!
+                                                .watch(
+                                                  selectedBankAccountProvider,
+                                                )!
                                                 .symbol]
                                           : null,
                                       backgroundColor:
                                           ref
-                                                  .watch(bankAccountProvider)
+                                                  .watch(
+                                                    selectedBankAccountProvider,
+                                                  )
                                                   ?.color !=
                                               null
                                           ? accountColorListTheme[ref
-                                                .watch(bankAccountProvider)!
+                                                .watch(
+                                                  selectedBankAccountProvider,
+                                                )!
                                                 .color]
                                           : null,
                                       size: 16,
@@ -192,7 +201,11 @@ class _AmountSectionState extends ConsumerState<AmountSection> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      ref.watch(bankAccountProvider)?.name ??
+                                      ref
+                                              .watch(
+                                                selectedBankAccountProvider,
+                                              )
+                                              ?.name ??
                                           "Select Account",
                                       style: Theme.of(context)
                                           .textTheme

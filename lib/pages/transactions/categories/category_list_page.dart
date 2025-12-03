@@ -81,8 +81,9 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                   CategoryTransaction category = categorys[i];
                   return DefaultCard(
                     onTap: () {
-                      ref.read(selectedCategoryProvider.notifier).state =
-                          category;
+                      ref
+                          .read(selectedCategoryProvider.notifier)
+                          .setCategory(category);
                       Navigator.of(context).pushNamed('/add-category');
                     },
                     child: Row(

@@ -4,14 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
+import '../../../model/currency.dart';
 import '../../../model/transaction.dart';
 
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../services/database/repositories/transactions_repository.dart';
 import '../../../services/transactions/recurring_transaction_calculator.dart';
 import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -34,7 +35,8 @@ class _OlderRecurringPaymentsState
   @override
   void initState() {
     super.initState();
-    TransactionMethods()
+    ref
+        .read(transactionsRepositoryProvider)
         .getRecurrenceTransactionsById(id: widget.transaction.id)
         .then((value) {
           setState(() {
@@ -66,7 +68,7 @@ class _OlderRecurringPaymentsState
 
   @override
   Widget build(BuildContext context) {
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     final categories = ref.watch(categoriesProvider).value;
     final category = categories?.firstWhereOrNull(
       (element) => element.id == widget.transaction.idCategory,
@@ -113,15 +115,16 @@ class _OlderRecurringPaymentsState
             _CategoryHeader(
               category: category,
               transaction: widget.transaction,
-              currencyState: currencyState,
+              currency: currencyState,
             ),
             const SizedBox(height: Sizes.sm),
             Builder(
               builder: (ctx) {
-                var recurrence = parseRecurrence(widget.transaction.recurrency);
-                final label = recurrenceMap[recurrence]!.label;
+                var recurrence = Recurrence.fromJson(
+                  widget.transaction.recurrency,
+                );
                 return Text(
-                  "$label"
+                  "${recurrence.label}"
                   " on the ${ordinal(int.parse(getNextDueDay()))} day",
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
@@ -145,9 +148,10 @@ class _OlderRecurringPaymentsState
                         return DefaultContainer(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: Sizes.sm,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 16.0),
+                                padding: const EdgeInsets.only(right: Sizes.lg),
                                 child: Row(
                                   children: [
                                     Text(
@@ -160,7 +164,7 @@ class _OlderRecurringPaymentsState
                                     _buildAmountText(
                                       context,
                                       totalyealyAmt,
-                                      currencyState.selectedCurrency.symbol,
+                                      currencyState.symbol,
                                     ),
                                   ],
                                 ),
@@ -210,9 +214,7 @@ class _OlderRecurringPaymentsState
                                                   _buildAmountText(
                                                     context,
                                                     montlyAmt,
-                                                    currencyState
-                                                        .selectedCurrency
-                                                        .symbol,
+                                                    currencyState.symbol,
                                                   ),
                                                 ],
                                               ),
@@ -350,8 +352,9 @@ class _OlderRecurringPaymentsState
           widget.transaction.lastInsertion ?? widget.transaction.fromDate,
         )
         .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
+    final daysInterval = Recurrence.fromJson(
+      widget.transaction.recurrency,
+    ).days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }
@@ -408,12 +411,12 @@ class _CategoryHeader extends StatelessWidget {
   const _CategoryHeader({
     required this.category,
     required this.transaction,
-    required this.currencyState,
+    required this.currency,
   });
 
   final CategoryTransaction category;
   final RecurringTransaction transaction;
-  final CurrencyState currencyState;
+  final Currency currency;
 
   @override
   Widget build(BuildContext context) {
@@ -432,7 +435,7 @@ class _CategoryHeader extends StatelessWidget {
         Text(
           "${transaction.type.prefix}"
           "${transaction.amount}"
-          "${currencyState.selectedCurrency.symbol}",
+          "${currency.symbol}",
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
             color: transaction.type.toColor(
               brightness: Theme.of(context).brightness,
