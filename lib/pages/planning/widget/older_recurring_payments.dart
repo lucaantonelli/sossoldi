@@ -11,7 +11,6 @@ import '../../../providers/categories_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../services/transactions/recurring_transaction_calculator.dart';
 import '../../../ui/device.dart';
-import '../../../ui/extensions.dart';
 import '../../../ui/widgets/default_container.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -118,10 +117,11 @@ class _OlderRecurringPaymentsState
             const SizedBox(height: Sizes.sm),
             Builder(
               builder: (ctx) {
-                var recurrence = parseRecurrence(widget.transaction.recurrency);
-                final label = recurrenceMap[recurrence]!.label;
+                var recurrence = Recurrence.fromJson(
+                  widget.transaction.recurrency,
+                );
                 return Text(
-                  "$label"
+                  "${recurrence.label}"
                   " on the ${ordinal(int.parse(getNextDueDay()))} day",
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
@@ -350,8 +350,9 @@ class _OlderRecurringPaymentsState
           widget.transaction.lastInsertion ?? widget.transaction.fromDate,
         )
         .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(widget.transaction.recurrency)]!.days;
+    final daysInterval = Recurrence.fromJson(
+      widget.transaction.recurrency,
+    ).days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }

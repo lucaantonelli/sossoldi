@@ -26,8 +26,7 @@ class RecurringPaymentCard extends ConsumerWidget {
     final daysPassed = now
         .difference(transaction.lastInsertion ?? transaction.fromDate)
         .inDays;
-    final daysInterval =
-        recurrenceMap[parseRecurrence(transaction.recurrency)]!.days;
+    final daysInterval = Recurrence.fromJson(transaction.recurrency).days;
     final daysUntilNextTransaction = daysInterval - (daysPassed % daysInterval);
     return daysUntilNextTransaction.toString();
   }

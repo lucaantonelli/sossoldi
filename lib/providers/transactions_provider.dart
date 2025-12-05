@@ -338,7 +338,7 @@ class AsyncTransactionsNotifier
           .watch(accountsProvider)
           .value!
           .firstWhere((element) => element.id == transaction.idBankAccount);
-      ref.read(intervalProvider.notifier).state = parseRecurrence(
+      ref.read(intervalProvider.notifier).state = Recurrence.fromJson(
         transaction.recurrency,
       );
       ref.read(endDateProvider.notifier).state = transaction.toDate;
