@@ -2,11 +2,11 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/transaction.dart';
+import '../../../providers/transactions_provider.dart';
 import '../../../providers/currency_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../ui/widgets/transaction_type_button.dart';
 
 class PanelListTile extends ConsumerWidget {
   const PanelListTile({
@@ -31,7 +31,7 @@ class PanelListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedListIndexProvider);
-    final currencyState = ref.watch(currencyStateNotifier);
+    final currencyState = ref.watch(currencyStateProvider);
     return ClipRRect(
       borderRadius: BorderRadius.circular(Sizes.borderRadius),
       child: ExpansionPanelList(
@@ -39,7 +39,7 @@ class PanelListTile extends ConsumerWidget {
         expandedHeaderPadding: EdgeInsets.zero,
         expansionCallback: (_, isExpanded) {
           if (isExpanded) {
-            ref.read(selectedListIndexProvider.notifier).state = index;
+            ref.read(selectedListIndexProvider.notifier).setIndex(index);
           } else {
             ref.invalidate(selectedListIndexProvider);
           }
@@ -75,7 +75,7 @@ class PanelListTile extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               Text(
-                                "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
+                                "${amount.toCurrency()} ${currencyState.symbol}",
                                 style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(color: amount.toColor()),
                               ),
@@ -137,7 +137,7 @@ class PanelListTile extends ConsumerWidget {
                                     ).textTheme.titleMedium,
                                   ),
                                   Text(
-                                    "${amount.toCurrency()} ${currencyState.selectedCurrency.symbol}",
+                                    "${amount.toCurrency()} ${currencyState.symbol}",
                                     style: Theme.of(context).textTheme.bodyLarge
                                         ?.copyWith(color: amount.toColor()),
                                   ),
