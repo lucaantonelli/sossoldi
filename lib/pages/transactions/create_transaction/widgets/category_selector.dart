@@ -30,6 +30,9 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
     final categoriesList = ref.watch(
       categoriesByTypeProvider(transactionType.categoryType),
     );
+    final frequentCategories = ref.watch(
+      frequentCategoriesProvider(transactionType.categoryType),
+    );
 
     return Container(
       color: Theme.of(context).colorScheme.primaryContainer,
@@ -70,7 +73,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
                     color: Theme.of(context).colorScheme.surface,
                     height: 74,
                     width: double.infinity,
-                    child: categoriesList.when(
+                    child: frequentCategories.when(
                       data: (categories) => ListView.builder(
                         itemCount: categories.length, // to prevent range error
                         scrollDirection: Axis.horizontal,
