@@ -60,26 +60,6 @@ class CategoryRepository {
     return result.map((json) => CategoryTransaction.fromJson(json)).toList();
   }
 
-  Future<List<CategoryTransaction>> selectCategoriesByType(
-    CategoryTransactionType type,
-  ) async {
-    final db = await _sossoldiDB.database;
-
-    final result = await db.query(
-      categoryTransactionTable,
-      columns: CategoryTransactionFields.allFields,
-      where: '${CategoryTransactionFields.type} = ?',
-      whereArgs: [type.code],
-      orderBy: orderByASC,
-    );
-
-    if (result.isNotEmpty) {
-      return result.map((json) => CategoryTransaction.fromJson(json)).toList();
-    } else {
-      return [];
-    }
-  }
-
   Future<int> updateItem(CategoryTransaction item) async {
     final db = await _sossoldiDB.database;
 
@@ -92,16 +72,38 @@ class CategoryRepository {
     );
   }
 
-  Future<int> deleteById(int id) async {
+  Future<void> deleteById(
+    CategoryTransaction item, {
+    bool isSub = false,
+  }) async {
     final db = await _sossoldiDB.database;
 
-    final rows = await db.delete(
+    await db.update(
       categoryTransactionTable,
+      item.toJson(delete: true),
       where: '${CategoryTransactionFields.id} = ?',
-      whereArgs: [id],
+      whereArgs: [item.id],
     );
-    await normalizeOrders();
-    return rows;
+
+    await db
+        .query(
+          categoryTransactionTable,
+          where:
+              '${CategoryTransactionFields.parent} = ? AND ${CategoryTransactionFields.deletedAt} IS NULL',
+          whereArgs: [item.id],
+        )
+        .then((subcategories) async {
+          for (final subcategory in subcategories) {
+            await deleteById(
+              CategoryTransaction.fromJson(subcategory),
+              isSub: true,
+            );
+          }
+        });
+
+    if (!isSub) {
+      await normalizeOrders();
+    }
   }
 
   Future<void> updateOrders(List<CategoryTransaction> items) async {
@@ -125,6 +127,7 @@ class CategoryRepository {
     final result = await db.query(
       categoryTransactionTable,
       columns: [CategoryTransactionFields.id],
+      where: '${CategoryTransactionFields.deletedAt} IS NULL',
       orderBy: orderByASC,
     );
 
