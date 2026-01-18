@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'accounts_sum.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
 import '../../../providers/accounts_provider.dart';
-import '../../../providers/theme_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/rounded_icon.dart';
+import 'accounts_sum.dart';
 
 class AccountSection extends ConsumerWidget {
   const AccountSection({super.key});
@@ -15,7 +14,6 @@ class AccountSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accountList = ref.watch(accountsProvider);
-    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     return SizedBox(
       height: 80.0,
       child: accountList.when(
@@ -53,9 +51,7 @@ class AccountSection extends ConsumerWidget {
                   label: Text(
                     "New Account",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: isDarkMode
-                          ? grey3
-                          : Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                     maxLines: 2,
                   ),

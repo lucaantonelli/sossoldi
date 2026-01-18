@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../ui/assets.dart';
 import '../../ui/device.dart';
 import 'widgets/budget_setup.dart';
-import '/constants/style.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -15,7 +15,7 @@ class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blue7,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,9 +27,7 @@ class _OnboardingState extends State<Onboarding> {
                 SizedBox(height: MediaQuery.sizeOf(context).height / 9),
                 Text(
                   'Set up the app',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineLarge?.copyWith(color: blue1),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 const SizedBox(height: 80),
                 Image.asset(
@@ -40,9 +38,7 @@ class _OnboardingState extends State<Onboarding> {
                 Text(
                   'In a few steps you\'ll be ready to start keeping\ntrack of your personal finances (almost) like\nMr. Rip',
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: blue1),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

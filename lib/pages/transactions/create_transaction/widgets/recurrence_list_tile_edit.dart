@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../../constants/style.dart";
-import '../../../../providers/theme_provider.dart';
 import '../../../../providers/transactions_provider.dart';
 import '../../../../ui/device.dart';
 import '../../../../ui/extensions.dart';
@@ -16,7 +15,6 @@ class RecurrenceListTileEdit extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     final isRecurring = ref.watch(selectedRecurringPayProvider);
     final endDate = ref.watch(endDateProvider);
 
@@ -70,17 +68,13 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                   Text(
                     ref.watch(intervalProvider).label,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: isDarkMode
-                          ? grey3
-                          : Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                   const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                 ],
               ),
@@ -113,17 +107,13 @@ class RecurrenceListTileEdit extends ConsumerWidget {
                   Text(
                     endDate != null ? endDate.formatEDMY() : "Never",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: isDarkMode
-                          ? grey3
-                          : Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                   const SizedBox(width: Sizes.xs),
                   Icon(
                     Icons.chevron_right,
-                    color: isDarkMode
-                        ? grey3
-                        : Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                 ],
               ),

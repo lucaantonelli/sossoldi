@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../ui/device.dart';
 
@@ -32,8 +29,8 @@ class CategoryButton extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                color: white,
                 shape: BoxShape.circle,
+                color: Colors.white,
               ),
               padding: const EdgeInsets.all(Sizes.xxs),
               child: Icon(Icons.check_rounded, color: categoryColor, size: 22),
@@ -46,15 +43,13 @@ class CategoryButton extends StatelessWidget {
                 Text(
                   categoryName,
                   textAlign: TextAlign.left,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: white),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
                   "BUDGET: ${budget?.amountLimit}€",
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(fontSize: 10, color: white),
+                  ).textTheme.bodyLarge?.copyWith(fontSize: 10),
                 ),
               ],
             ),
@@ -65,21 +60,15 @@ class CategoryButton extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(color: categoryColor, width: 2.5),
-          color: HSLColor.fromColor(
-            categoryColor,
-          ).withLightness(clampDouble(0.99, 0.0, 0.9)).toColor(),
-          borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+          color: categoryColor.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(Sizes.borderRadius),
         ),
         alignment: Alignment.center,
         child: Row(
           children: [
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Sizes.sm),
-              child: Icon(
-                Icons.add_circle_outline_outlined,
-                size: 30,
-                color: blue1,
-              ),
+              child: Icon(Icons.add_circle_outline_outlined, size: 30),
             ),
             Expanded(
               child: Padding(

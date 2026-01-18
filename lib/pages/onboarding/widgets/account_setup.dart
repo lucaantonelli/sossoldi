@@ -48,7 +48,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blue7,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
@@ -63,27 +63,21 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
               Text(
                 "Set the liquidity in your main account",
                 textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: Sizes.xl),
               Text(
                 "It will be used as a baseline to which you can add income, expenses and calculate your wealth.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: Sizes.sm),
               Text(
                 "You'll be able to add more accounts within the app.",
                 textAlign: TextAlign.center,
                 maxLines: 3,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: Sizes.sm),
               Expanded(
@@ -99,16 +93,9 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                       vertical: Sizes.lg,
                     ),
                     decoration: BoxDecoration(
-                      color: white,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       shape: BoxShape.rectangle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withValues(alpha: 0.5),
-                          spreadRadius: 2,
-                          blurRadius: 8,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
+                      boxShadow: [defaultShadow],
                       borderRadius: BorderRadius.circular(
                         Sizes.borderRadiusLarge,
                       ),
@@ -121,9 +108,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               "ACCOUNT NAME ",
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                             const Icon(Icons.edit, size: 10),
                           ],
@@ -156,9 +141,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               "SET AMOUNT ",
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                             const Icon(Icons.edit, size: 10),
                           ],
@@ -199,9 +182,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               "EDIT ICON AND COLOR ",
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelSmall?.copyWith(color: grey1),
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                             const Icon(Icons.edit, size: 10),
                           ],
@@ -216,7 +197,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           child: Icon(
                             accountIconList[accountIcon],
                             size: 36,
-                            color: Theme.of(context).colorScheme.onPrimary,
+                            color: Theme.of(context).colorScheme.onSecondary,
                           ),
                         ),
                         const SizedBox(height: Sizes.md),
@@ -324,9 +305,7 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                   const SizedBox(height: Sizes.lg),
                   Text(
                     'Or you can skip this step and start from 0',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: blue1),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: Sizes.sm),
                   ElevatedButton(
@@ -350,56 +329,49 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                           children: [
                             Text(
                               'START FROM 0  ',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(color: blue1),
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            const Icon(
+                            Icon(
                               Icons.arrow_forward,
+                              color: Theme.of(context).colorScheme.primary,
                               size: 15,
-                              color: blue1,
                             ),
                           ],
                         ),
                         SizedBox(
                           width: MediaQuery.sizeOf(context).width / 3,
-                          child: const Divider(color: blue1, thickness: 1),
+                          child: const Divider(thickness: 1),
                         ),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.xl,
-                      vertical: Sizes.lg,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_validAmount) {
-                          await ref
-                              .watch(accountsProvider.notifier)
-                              .addAccount(
-                                name: accountNameController.text,
-                                icon: accountIcon,
-                                color: accountColor,
-                                mainAccount: true,
-                                startingValue:
-                                    num.tryParse(amountController.text) ?? 0,
-                              );
-                          await _flagOnBoardingCompleted();
-                          if (context.mounted) {
-                            Navigator.of(
-                              context,
-                            ).pushNamedAndRemoveUntil('/', (route) => false);
-                          }
+                  const SizedBox(height: Sizes.lg),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_validAmount) {
+                        await ref
+                            .watch(accountsProvider.notifier)
+                            .addAccount(
+                              name: accountNameController.text,
+                              icon: accountIcon,
+                              color: accountColor,
+                              mainAccount: true,
+                              startingValue:
+                                  num.tryParse(amountController.text) ?? 0,
+                            );
+                        await _flagOnBoardingCompleted();
+                        if (context.mounted) {
+                          Navigator.of(
+                            context,
+                          ).pushNamedAndRemoveUntil('/', (route) => false);
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _validAmount ? blue5 : grey2,
-                      ),
-                      child: const Center(
-                        child: Text('START TRACKING YOUR EXPENSES'),
-                      ),
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _validAmount ? blue5 : grey2,
+                    ),
+                    child: const Center(
+                      child: Text('START TRACKING YOUR EXPENSES'),
                     ),
                   ),
                 ],

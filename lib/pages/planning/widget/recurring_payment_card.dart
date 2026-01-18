@@ -1,18 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constants/constants.dart';
+import '../../../constants/style.dart';
+import '../../../model/recurring_transaction.dart';
+import '../../../providers/accounts_provider.dart';
+import '../../../providers/categories_provider.dart';
+import '../../../providers/currency_provider.dart';
+import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/rounded_icon.dart';
-import '../../../model/recurring_transaction.dart';
-import '../../../providers/theme_provider.dart';
-import '../../../ui/device.dart';
 import 'older_recurring_payments.dart';
-import '../../../providers/accounts_provider.dart';
-import '../../../providers/currency_provider.dart';
-
-import '../../../constants/style.dart';
-import '../../../providers/categories_provider.dart';
 
 /// This class shows account summaries in dashboard
 class RecurringPaymentCard extends ConsumerWidget {
@@ -34,7 +33,6 @@ class RecurringPaymentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider).value;
     final accounts = ref.watch(accountsProvider).value;
-    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
     final currencyState = ref.watch(currencyStateProvider);
 
     var category = categories?.firstWhereOrNull(
@@ -168,12 +166,8 @@ class RecurringPaymentCard extends ConsumerWidget {
                               backgroundColor: Theme.of(
                                 context,
                               ).colorScheme.primaryContainer,
-                              foregroundColor: isDarkMode
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.secondary,
-                              iconColor: isDarkMode
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.secondary,
+                              foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                              iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
                               overlayColor: Theme.of(
                                 context,
                               ).colorScheme.primary,

@@ -101,15 +101,13 @@ class Launcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeState = ref.watch(appThemeStateProvider);
+    final appTheme = ref.watch(appThemeProvider);
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
     return MaterialApp(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeState.isDarkModeEnabled
-          ? ThemeMode.dark
-          : ThemeMode.light,
+      themeMode: appTheme,
       onGenerateRoute: makeRoute,
       initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
     );

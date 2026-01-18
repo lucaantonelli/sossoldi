@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../ui/widgets/rounded_icon.dart';
-import '../../../../constants/style.dart';
-import '../../../../providers/theme_provider.dart';
 import '../../../../ui/device.dart';
+import '../../../../ui/widgets/rounded_icon.dart';
 
-class LabelListTile extends ConsumerWidget {
+class LabelListTile extends StatelessWidget {
   const LabelListTile(this.labelController, {super.key});
 
   final TextEditingController labelController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
-
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         Sizes.lg,
@@ -46,9 +41,7 @@ class LabelListTile extends ConsumerWidget {
               ),
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: isDarkMode
-                    ? grey3
-                    : Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
           ),

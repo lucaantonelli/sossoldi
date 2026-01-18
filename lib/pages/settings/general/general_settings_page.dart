@@ -9,6 +9,7 @@ import '../../../providers/theme_provider.dart';
 import '../../../services/database/repositories/currency_repository.dart';
 import '../../../ui/device.dart';
 import 'widgets/currency_selector_dialog.dart';
+import 'widgets/theme_selector_tile.dart';
 
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
@@ -20,8 +21,6 @@ class GeneralSettingsPage extends ConsumerStatefulWidget {
 
 class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   //default values
-  bool darkMode = false;
-  String selectedCurrency = "EUR";
   dynamic selectedLanguage = "🇬🇧";
 
   List<List<dynamic>> languages = [
@@ -33,7 +32,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appThemeState = ref.watch(appThemeStateProvider);
+    final appThemeState = ref.watch(appThemeProvider);
     final currencyState = ref.watch(currencyStateProvider);
     Future<List<Currency>> currencyList = ref
         .read(currencyRepositoryProvider)
@@ -48,110 +47,108 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
         ),
         title: const Text('General Settings'),
       ),
-      body: SingleChildScrollView(
+      body: ListView(
         padding: const EdgeInsets.only(
           left: Sizes.lg,
           right: Sizes.lg,
           top: Sizes.xl,
         ),
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          spacing: Sizes.lg,
-          children: [
-            Row(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.lg,
+              vertical: Sizes.md,
+            ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(Sizes.borderRadiusSmall),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Appearance",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const Spacer(),
-                CircleAvatar(
-                  radius: 30.0,
-                  backgroundColor: blue5,
-                  child: IconButton(
-                    color: blue5,
-                    onPressed: () {
-                      ref.read(appThemeStateProvider.notifier).updateTheme();
+                const Text("SELECT THEME"),
+                const SizedBox(height: Sizes.md),
+                ...ThemeMode.values.map(
+                  (mode) => ThemeSelectorTile(
+                    mode: mode,
+                    selected: appThemeState == mode,
+                    onSelection: () {
+                      ref
+                          .read(appThemeProvider.notifier)
+                          .updateTheme(context, mode);
                     },
-                    icon: Icon(
-                      appThemeState.isDarkModeEnabled
-                          ? Icons.dark_mode
-                          : Icons.light_mode,
-                      size: 25.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
                   ),
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  "Currency",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+          ),
+          const SizedBox(height: Sizes.lg),
+          Row(
+            children: [
+              Text(
+                "Currency",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      CurrencySelectorDialog.selectCurrencyDialog(
-                        context,
-                        currencyState,
-                        currencyList,
-                      );
-                    });
-                  },
-                  child: CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: blue5,
-                    child: Center(
-                      child: Text(
-                        currencyState.symbol,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 25,
-                        ),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    CurrencySelectorDialog.selectCurrencyDialog(
+                      context,
+                      currencyState,
+                      currencyList,
+                    );
+                  });
+                },
+                child: CircleAvatar(
+                  radius: 30.0,
+                  backgroundColor: blue5,
+                  child: Center(
+                    child: Text(
+                      currencyState.symbol,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 25,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Require authentication",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+              ),
+            ],
+          ),
+          const SizedBox(height: Sizes.lg),
+          Row(
+            children: [
+              Text(
+                "Require authentication",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              const Spacer(),
+              CircleAvatar(
+                radius: 30.0,
+                backgroundColor: blue5,
+                child: IconButton(
+                  color: blue5,
+                  onPressed: () {
+                    ref
+                        .read(authenticationStateProvider.notifier)
+                        .updateAuthentication();
+                  },
+                  icon: Icon(
+                    requiresAuthenticationState ? Icons.lock : Icons.lock_open,
+                    size: 25.0,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
-                const Spacer(),
-                CircleAvatar(
-                  radius: 30.0,
-                  backgroundColor: blue5,
-                  child: IconButton(
-                    color: blue5,
-                    onPressed: () {
-                      ref
-                          .read(authenticationStateProvider.notifier)
-                          .updateAuthentication();
-                    },
-                    icon: Icon(
-                      requiresAuthenticationState
-                          ? Icons.lock
-                          : Icons.lock_open,
-                      size: 25.0,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            /*
+              ),
+            ],
+          ),
+          /*
             Row(
               children: [
                 Text("Language",
@@ -169,8 +166,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
                     )),
               ],
             ),*/
-          ],
-        ),
+        ],
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/constants.dart';
+// import '../../../constants/style.dart';
 import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../providers/budgets_provider.dart';
@@ -38,7 +39,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
         0;
     final categoriesGrid = ref.watch(allParentCategoriesProvider);
     return Scaffold(
-      backgroundColor: blue7,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Sizes.lg),
@@ -52,17 +53,13 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
               Text(
                 "Set up your monthly\nbudgets",
                 textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: Sizes.xxl),
               Text(
                 "Choose which categories you want to set a budget for",
                 textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: blue1),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: Sizes.lg),
               Expanded(
@@ -130,109 +127,97 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                 ),
               ),
 
-              // if the total budget (sum of the budget of the selected cards) is > 0, set the other layout. otherwise set the "continue without budget" button
-              totalBudget > 0
-                  ? Center(
-                      child: Column(
+              if (totalBudget > 0)
+                Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: Sizes.sm),
+                      Text(
+                        "Monthly budget total:",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: Sizes.sm),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: totalBudget.toString(),
+                              style: Theme.of(context).textTheme.displayMedium,
+                            ),
+                            TextSpan(
+                              text: "€",
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.apply(
+                                    fontFeatures: [
+                                      const FontFeature.subscripts(),
+                                    ],
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: Sizes.xl),
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          boxShadow: [defaultShadow],
+                          borderRadius: BorderRadius.circular(
+                            Sizes.borderRadius,
+                          ),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AccountSetup(),
+                              ),
+                            );
+                          },
+                          child: const Text("NEXT STEP"),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AccountSetup(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0.0,
+                    shadowColor: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: Sizes.sm),
                           Text(
-                            "Monthly budget total:",
-                            style: Theme.of(context).textTheme.bodySmall,
+                            'CONTINUE WITHOUT BUDGET  ',
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
-                          const SizedBox(height: Sizes.sm),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: totalBudget.toString(),
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.displayMedium,
-                                ),
-                                TextSpan(
-                                  text: "€",
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.apply(
-                                        fontFeatures: [
-                                          const FontFeature.subscripts(),
-                                        ],
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: Sizes.xl),
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width,
-                            height: 48,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AccountSetup(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: blue5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    Sizes.borderRadius,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                'NEXT STEP',
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                            ),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 15,
                           ),
                         ],
                       ),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AccountSetup(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0.0,
-                        shadowColor: Colors.transparent,
-                        backgroundColor: Colors.transparent,
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width / 1.6,
+                        child: const Divider(thickness: 1),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'CONTINUE WITHOUT BUDGET  ',
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium?.copyWith(color: blue1),
-                              ),
-                              const Icon(
-                                Icons.arrow_forward,
-                                size: 15,
-                                color: blue1,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width / 1.6,
-                            child: const Divider(color: blue1, thickness: 1),
-                          ),
-                        ],
-                      ),
-                    ),
-              const SizedBox(height: Sizes.xl),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),

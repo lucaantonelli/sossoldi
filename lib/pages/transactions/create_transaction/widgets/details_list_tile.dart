@@ -1,12 +1,9 @@
 import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../../../../constants/style.dart";
-import "../../../../providers/theme_provider.dart";
-import "../../../../ui/widgets/rounded_icon.dart";
 import "../../../../ui/device.dart";
+import "../../../../ui/widgets/rounded_icon.dart";
 
-class DetailsListTile extends ConsumerWidget {
+class DetailsListTile extends StatelessWidget {
   const DetailsListTile({
     required this.title,
     required this.icon,
@@ -21,9 +18,7 @@ class DetailsListTile extends ConsumerWidget {
   final VoidCallback callback;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(appThemeStateProvider).isDarkModeEnabled;
-
+  Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.all(Sizes.lg),
       onTap: callback,
@@ -43,15 +38,13 @@ class DetailsListTile extends ConsumerWidget {
           Text(
             value ?? '',
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: isDarkMode
-                  ? grey3
-                  : Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
           ),
           const SizedBox(width: Sizes.sm),
           Icon(
             Icons.chevron_right,
-            color: isDarkMode ? grey3 : Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),
         ],
       ),

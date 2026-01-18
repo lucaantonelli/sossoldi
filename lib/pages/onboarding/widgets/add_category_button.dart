@@ -11,30 +11,16 @@ class AddCategoryButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: grey2, width: 1.5),
-        color: grey3,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(Sizes.borderRadius),
       ),
       child: Row(
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: Sizes.sm),
-            child: Icon(
-              Icons.add_circle_outline_outlined,
-              size: 30,
-              color: grey1,
-            ),
+            child: Icon(Icons.add_circle_outline_outlined, size: 30),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                "Add category",
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: grey1),
-              ),
-            ],
-          ),
+          Text("Add category", style: Theme.of(context).textTheme.bodyMedium),
         ],
       ),
     );
