@@ -13,7 +13,7 @@ class CategoryList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categorysList = ref.watch(allParentCategoriesProvider);
+    final categoriesList = ref.watch(activeCategoriesProvider);
     ref.listen(selectedCategoryProvider, (_, _) {});
     return Scaffold(
       appBar: AppBar(
@@ -65,11 +65,11 @@ class CategoryList extends ConsumerWidget {
                 ],
               ),
             ),
-            categorysList.when(
-              data: (categorys) => ReorderableListView.builder(
+            categoriesList.when(
+              data: (categories) => ReorderableListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: categorys.length,
+                itemCount: categories.length,
                 onReorder: (oldIndex, newIndex) {
                   ref
                       .read(categoriesProvider.notifier)
@@ -83,7 +83,7 @@ class CategoryList extends ConsumerWidget {
                   );
                 },
                 itemBuilder: (context, i) {
-                  CategoryTransaction category = categorys[i];
+                  CategoryTransaction category = categories[i];
                   return Container(
                     key: ValueKey(category.id),
                     margin: const EdgeInsets.only(bottom: Sizes.lg),
