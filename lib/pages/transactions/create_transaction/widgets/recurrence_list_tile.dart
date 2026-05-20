@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import "../../../../constants/style.dart";
+import '../../../../routes/app_router.dart';
 import '../../../../ui/extensions.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../providers/theme_provider.dart';
@@ -189,14 +191,11 @@ class RecurrenceListTile extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: Sizes.lg),
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(
-                        "/edit-recurring-transaction",
-                        arguments: selectedTransaction,
-                      )
+                  context.router
+                      .push(const EditRecurringTransactionRoute())
                       .then((value) {
                         if (context.mounted) {
-                          Navigator.of(context).pop();
+                          context.router.pop();
                         }
                       });
                 },
@@ -242,7 +241,7 @@ class EndDateSelector extends ConsumerWidget {
             title: const Text("Never"),
             onTap: () {
               ref.read(endDateProvider.notifier).setDate(null);
-              Navigator.pop(context);
+              context.router.pop();
             },
           ),
           ListTile(

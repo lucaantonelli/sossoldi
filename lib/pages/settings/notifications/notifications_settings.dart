@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,8 +8,9 @@ import '../../../ui/device.dart';
 import '../../../services/notifications/notifications_service.dart';
 import 'widgets/notification_type_tile.dart';
 
-class NotificationsSettings extends ConsumerWidget {
-  const NotificationsSettings({super.key});
+@RoutePage()
+class NotificationsSettingsPage extends ConsumerWidget {
+  const NotificationsSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,7 +25,7 @@ class NotificationsSettings extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Notifications'),
       ),

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,6 +44,7 @@ IconData _platformIcon(String url) {
   return FontAwesomeIcons.globe;
 }
 
+@RoutePage()
 class CollaboratorsPage extends ConsumerWidget {
   const CollaboratorsPage({super.key});
 
@@ -52,7 +54,7 @@ class CollaboratorsPage extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Collaborators'),
       ),

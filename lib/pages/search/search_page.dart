@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/accounts_provider.dart';
@@ -8,6 +9,7 @@ import '../../ui/widgets/transactions_list.dart';
 import '../../model/transaction.dart';
 import '../../ui/device.dart';
 
+@RoutePage()
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
 
@@ -40,7 +42,7 @@ class _SearchPage extends ConsumerState<SearchPage> {
         title: const Text("Search"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
       ),
       body: Padding(

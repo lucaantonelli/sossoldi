@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +9,7 @@ import '../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
 import 'widgets/category_icon_color_selector.dart';
 
+@RoutePage()
 class CreateEditSubcategoryPage extends ConsumerStatefulWidget {
   final CategoryTransaction category;
 
@@ -56,7 +58,7 @@ class _CreateEditSubcategoryPage
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => context.router.pop(false),
         ),
       ),
       persistentFooterDecoration: BoxDecoration(
@@ -106,7 +108,7 @@ class _CreateEditSubcategoryPage
                   // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
                   //
                   // If the category has been created correctly, result is true.
-                  if (context.mounted) Navigator.of(context).pop(true);
+                  if (context.mounted) context.router.pop(true);
                 }
               },
               child: Text(
@@ -169,7 +171,7 @@ class _CreateEditSubcategoryPage
                       .removeCategory(selectedSubcategory)
                       .whenComplete(() {
                         if (context.mounted) {
-                          Navigator.of(context).pop();
+                          context.router.pop();
                         }
                       }),
                   style: TextButton.styleFrom(

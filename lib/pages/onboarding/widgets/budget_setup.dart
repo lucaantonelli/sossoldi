@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,21 +8,21 @@ import '../../../constants/style.dart';
 import '../../../model/budget.dart';
 import '../../../providers/budgets_provider.dart';
 import '../../../providers/categories_provider.dart';
+import '../../../routes/app_router.dart';
 import '../../../ui/device.dart';
-import '../../categories/create_edit_category_page.dart';
-import 'account_setup.dart';
 import 'add_budget_dialog.dart';
 import 'add_category_button.dart';
 import 'category_button.dart';
 
-class BudgetSetup extends ConsumerStatefulWidget {
-  const BudgetSetup({super.key});
+@RoutePage()
+class BudgetSetupPage extends ConsumerStatefulWidget {
+  const BudgetSetupPage({super.key});
 
   @override
-  ConsumerState<BudgetSetup> createState() => _BudgetSetupState();
+  ConsumerState<BudgetSetupPage> createState() => _BudgetSetupPageState();
 }
 
-class _BudgetSetupState extends ConsumerState<BudgetSetup> {
+class _BudgetSetupPageState extends ConsumerState<BudgetSetupPage> {
   // sum of the budget of the selected cards
 
   List<Budget>? budgetsList = [];
@@ -108,14 +109,8 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                         } else {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CreateEditCategoryPage(
-                                        hideIncome: true,
-                                      ),
-                                ),
+                              context.router.push(
+                                CreateEditCategoryRoute(hideIncome: true),
                               );
                             },
                             child: const AddCategoryButton(),
@@ -168,12 +163,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                             height: 48,
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AccountSetup(),
-                                  ),
-                                );
+                                context.router.push(const AccountSetupRoute());
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: blue5,
@@ -195,12 +185,7 @@ class _BudgetSetupState extends ConsumerState<BudgetSetup> {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AccountSetup(),
-                          ),
-                        );
+                        context.router.push(const AccountSetupRoute());
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0.0,

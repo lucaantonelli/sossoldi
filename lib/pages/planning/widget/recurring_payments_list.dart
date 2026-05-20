@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/style.dart';
 import '../../../providers/recurring_transactions_provider.dart';
+import '../../../routes/app_router.dart';
 import 'recurring_payment_card.dart';
 import '../../../model/recurring_transaction.dart';
 import '../../../providers/categories_provider.dart';
@@ -23,10 +25,7 @@ class RecurringPaymentSection extends ConsumerWidget {
       ref.invalidate(selectedBankAccountProvider);
       ref.invalidate(selectedCategoryProvider);
       ref.invalidate(endDateProvider);
-      Navigator.of(context).pushNamed(
-        "/add-page",
-        arguments: {'recurrencyEditingPermitted': false},
-      );
+      context.router.push(CreateTransactionRoute());
     }
 
     return Padding(
@@ -98,9 +97,9 @@ class RecurringPaymentSection extends ConsumerWidget {
                         .transactionSelect(transactions[index])
                         .whenComplete(() {
                           if (context.mounted) {
-                            Navigator.of(
-                              context,
-                            ).pushNamed("/edit-recurring-transaction");
+                            context.router.push(
+                              const EditRecurringTransactionRoute(),
+                            );
                           }
                         });
                   },

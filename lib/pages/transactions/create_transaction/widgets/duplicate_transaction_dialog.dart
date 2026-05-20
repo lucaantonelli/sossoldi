@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +21,7 @@ class DuplicateTransactionDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            context.router.pop();
           },
           child: const Text("Cancel", style: TextStyle(fontSize: 14)),
         ),
@@ -33,7 +34,7 @@ class DuplicateTransactionDialog extends ConsumerWidget {
               .duplicateTransaction(transaction)
               .then((t) {
                 if (context.mounted) {
-                  Navigator.of(context)
+                  context.router
                     ..pop()
                     ..pop();
                 }

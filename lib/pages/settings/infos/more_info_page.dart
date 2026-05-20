@@ -1,5 +1,4 @@
-// Settings page.
-
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +6,7 @@ import '../../../providers/settings_provider.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/device.dart';
 
+@RoutePage()
 class MoreInfoPage extends ConsumerWidget {
   const MoreInfoPage({super.key});
 
@@ -14,15 +14,15 @@ class MoreInfoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final moreInfoOptions = [
       ["App Version:", ref.watch(versionProvider), null],
-      ["Collaborators", "See the team behind this app", "/collaborators"],
-      ["Privacy Policy", "Read more", "/privacy-policy"],
+      ["Collaborators", "See the team behind this app", "/collaborators-route"],
+      ["Privacy Policy", "Read more", "/privacy-policy-route"],
     ];
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('App Info'),
       ),
@@ -60,7 +60,7 @@ class SettingsInfo extends StatelessWidget {
     return DefaultCard(
       onTap: () {
         if (link != null) {
-          Navigator.of(context).pushNamed(link as String);
+          context.router.pushPath(link as String);
         }
       },
       child: Row(

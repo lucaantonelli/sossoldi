@@ -1,23 +1,26 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/constants.dart';
 import '../../../providers/accounts_provider.dart';
+import '../../../routes/app_router.dart';
 import '../../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../../ui/device.dart';
 import '/constants/style.dart';
 
-class AccountSetup extends ConsumerStatefulWidget {
-  const AccountSetup({super.key});
+@RoutePage()
+class AccountSetupPage extends ConsumerStatefulWidget {
+  const AccountSetupPage({super.key});
 
   @override
-  ConsumerState<AccountSetup> createState() => _AccountSetupState();
+  ConsumerState<AccountSetupPage> createState() => _AccountSetupPageState();
 }
 
-class _AccountSetupState extends ConsumerState<AccountSetup> {
+class _AccountSetupPageState extends ConsumerState<AccountSetupPage> {
   TextEditingController accountNameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   String accountIcon = accountIconList.keys.first;
@@ -333,9 +336,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                     onPressed: () async {
                       await _flagOnBoardingCompleted();
                       if (context.mounted) {
-                        Navigator.of(
-                          context,
-                        ).pushNamedAndRemoveUntil('/', (route) => false);
+                        context.router.pushAndPopUntil(
+                          const DashboardRoute(),
+                          predicate: (route) => false,
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -388,9 +392,10 @@ class _AccountSetupState extends ConsumerState<AccountSetup> {
                               );
                           await _flagOnBoardingCompleted();
                           if (context.mounted) {
-                            Navigator.of(
-                              context,
-                            ).pushNamedAndRemoveUntil('/', (route) => false);
+                            context.router.pushAndPopUntil(
+                              const DashboardRoute(),
+                              predicate: (route) => false,
+                            );
                           }
                         }
                       },

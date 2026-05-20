@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,6 +13,7 @@ import 'widgets/category_icon_color_selector.dart';
 import 'widgets/confirm_category_deletion_dialog.dart';
 import 'widgets/subcategories_list.dart';
 
+@RoutePage()
 class CreateEditCategoryPage extends ConsumerStatefulWidget {
   final bool hideIncome;
 
@@ -62,7 +64,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
           // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
           //
           // If back button is pressed, no category has been added.
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => context.router.pop(false),
         ),
       ),
       persistentFooterDecoration: BoxDecoration(
@@ -116,7 +118,7 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                   // Result from the .pop is used in lib\pages\planning_page\manage_budget_page.dart.
                   //
                   // If the category has been created correctly, result is true.
-                  if (context.mounted) Navigator.of(context).pop(true);
+                  if (context.mounted) context.router.pop(true);
                 }
               },
               child: Text(
@@ -254,9 +256,8 @@ class _CreateEditCategoryPage extends ConsumerState<CreateEditCategoryPage> {
                               .removeCategory(selectedCategory)
                               .whenComplete(() {
                                 if (context.mounted) {
-                                  Navigator.popUntil(
-                                    context,
-                                    ModalRoute.withName('/category-list'),
+                                  context.router.popUntilRouteWithPath(
+                                    '/category-list',
                                   );
                                 }
                               }),

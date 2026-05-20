@@ -1,5 +1,6 @@
 // Settings page.
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../../ui/device.dart';
 
+@RoutePage()
 class PrivacyPolicyPage extends ConsumerStatefulWidget {
   const PrivacyPolicyPage({super.key});
 
@@ -21,7 +23,7 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Privacy Policy'),
       ),

@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../routes/app_router.dart';
 import 'accounts_sum.dart';
 import '../../../constants/style.dart';
 import '../../../model/bank_account.dart';
@@ -61,7 +63,7 @@ class AccountSection extends ConsumerWidget {
                   ),
                   onPressed: () {
                     ref.read(accountsProvider.notifier).reset();
-                    Navigator.of(context).pushNamed('/add-account');
+                    context.router.push(const CreateEditAccountRoute());
                   },
                 ),
               );

@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../ui/device.dart';
 import 'manage_budget_page.dart';
 import 'widget/budget_card.dart';
 import 'widget/recurring_payments_list.dart';
 
+@RoutePage()
 class PlanningPage extends StatelessWidget {
   const PlanningPage({super.key});
 

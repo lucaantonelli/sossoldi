@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,7 @@ import '../../../services/database/repositories/currency_repository.dart';
 import '../../../ui/device.dart';
 import 'widgets/currency_selector_dialog.dart';
 
+@RoutePage()
 class GeneralSettingsPage extends ConsumerStatefulWidget {
   const GeneralSettingsPage({super.key});
 
@@ -44,7 +46,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('General Settings'),
       ),
@@ -198,7 +200,7 @@ class _GeneralSettingsPageState extends ConsumerState<GeneralSettingsPage> {
   //                 setState(() {
   //                   selectedLanguage = languages.elementAt(index)[0];
   //                 });
-  //                 Navigator.pop(context);
+  //                 context.router.pop();
   //               },
   //               child: ListTile(
   //                 leading: Text(

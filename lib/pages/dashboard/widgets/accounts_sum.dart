@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,6 +7,7 @@ import '../../../model/bank_account.dart';
 import '../../../constants/style.dart';
 import '../../../providers/accounts_provider.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../routes/app_router.dart';
 import '../../../ui/device.dart';
 import '../../../ui/extensions.dart';
 import '../../../ui/widgets/blur_widget.dart';
@@ -42,7 +44,7 @@ class AccountsSum extends ConsumerWidget {
                   .refreshAccount(account)
                   .whenComplete(() {
                     if (context.mounted) {
-                      Navigator.of(context).pushNamed('/account');
+                      context.router.push(const AccountRoute());
                     }
                   });
             },

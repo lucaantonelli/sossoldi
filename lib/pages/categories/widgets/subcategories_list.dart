@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +6,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/style.dart';
 import '../../../model/category_transaction.dart';
 import '../../../providers/categories_provider.dart';
+import '../../../routes/app_router.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/rounded_icon.dart';
 
@@ -30,9 +32,8 @@ class SubcategoriesList extends ConsumerWidget {
                 child: InkWell(
                   onTap: () {
                     ref.invalidate(selectedSubcategoryProvider);
-                    Navigator.of(context).pushNamed(
-                      '/add-subcategory',
-                      arguments: {'category': category},
+                    context.router.push(
+                      CreateEditSubcategoryRoute(category: category),
                     );
                   },
                   child: Ink(
@@ -67,9 +68,8 @@ class SubcategoriesList extends ConsumerWidget {
                   ref
                       .read(selectedSubcategoryProvider.notifier)
                       .setCategory(subcategory);
-                  Navigator.of(context).pushNamed(
-                    '/add-subcategory',
-                    arguments: {'category': subcategory},
+                  context.router.push(
+                    CreateEditSubcategoryRoute(category: subcategory),
                   );
                 },
                 child: Ink(

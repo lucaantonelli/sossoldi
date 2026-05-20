@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/category_transaction.dart';
@@ -37,7 +38,7 @@ class ConfirmCategoryDeletionDialog extends StatelessWidget {
         AdaptiveDialogAction(
           child: const Text('Cancel'),
           onPressed: () {
-            Navigator.of(context).pop();
+            context.router.pop();
           },
         ),
         AdaptiveDialogAction(

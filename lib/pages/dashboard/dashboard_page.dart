@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,6 +16,7 @@ import '../../ui/widgets/blur_widget.dart';
 import '../../ui/widgets/line_chart.dart';
 import '../../ui/widgets/transactions_list.dart';
 
+@RoutePage()
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
 

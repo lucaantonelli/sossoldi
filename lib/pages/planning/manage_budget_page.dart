@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/budget.dart';
 import '../../model/category_transaction.dart';
 import '../../providers/currency_provider.dart';
+import '../../routes/app_router.dart';
 import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import '../../ui/snack_bars/snack_bar.dart';
@@ -65,11 +67,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
       actionLabel: "ADD",
       onAction: () async {
         final categoryAdded =
-            await Navigator.pushNamed(
-                  context,
-                  '/add-category',
-                  arguments: {'hideIncome': true},
-                )
+            await context.router.push(CreateEditCategoryRoute(hideIncome: true))
                 as bool?;
 
         if (categoryAdded ?? false) _loadCategories();
@@ -144,7 +142,7 @@ class _ManageBudgetPageState extends ConsumerState<ManageBudgetPage> {
                       .saveBudget(budgets, deletedBudgets);
 
                   if (context.mounted) {
-                    Navigator.of(context).pop();
+                    context.router.pop();
                   }
                 },
                 child: const Text("SAVE BUDGET"),

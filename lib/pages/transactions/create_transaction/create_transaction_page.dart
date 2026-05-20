@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +21,7 @@ import 'widgets/duplicate_transaction_dialog.dart';
 import 'widgets/label_list_tile.dart';
 import 'widgets/recurrence_list_tile.dart';
 
+@RoutePage()
 class CreateTransactionPage extends ConsumerStatefulWidget {
   const CreateTransactionPage({super.key, this.transaction});
 
@@ -120,7 +122,7 @@ class _CreateTransactionPage extends ConsumerState<CreateTransactionPage> {
         .read(accountsProvider.notifier)
         .refreshAccount(ref.read(selectedBankAccountProvider)!)
         .whenComplete(() {
-          if (mounted) Navigator.of(context).pop();
+          if (mounted) context.router.pop();
         });
   }
 
