@@ -2,6 +2,7 @@
 
 // ignore_for_file: unused_result
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,32 +27,32 @@ var settingsOptions = [
     Icons.settings,
     "General Settings",
     "Edit general settings",
-    "/general-settings",
+    "/general-settings-route",
   ],
   [
     Icons.account_balance_wallet,
     "Accounts",
     "Add or edit your accounts",
-    "/account-list",
+    "/account-list-route",
   ],
   [
     Icons.list_alt,
     "Categories",
     "Add/edit categories and subcategories",
-    "/category-list",
+    "/category-list-route",
   ],
   [Icons.attach_money, "Budget", "Add or edit your budgets", null],
   [
     Icons.download_for_offline,
     "Import/Export",
     "Import or export data from a CSV file",
-    "/backup-page",
+    "/backup-route",
   ],
   [
     Icons.notifications_active,
     "Notifications",
     "Manage your notifications settings",
-    "/notifications-settings",
+    "/notifications-settings-route",
   ],
   [
     Icons.feedback,
@@ -59,9 +60,15 @@ var settingsOptions = [
     "Complete a small form to report a bug or leave a feedback",
     "https://feedback.sossoldi.com",
   ],
-  [Icons.info, "App Info", "Learn more about us and the app", "/more-info"],
+  [
+    Icons.info,
+    "App Info",
+    "Learn more about us and the app",
+    "/more-info-route",
+  ],
 ];
 
+@RoutePage()
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
@@ -92,7 +99,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.router.pop(),
                 child: Text(
                   "OK",
                   style: TextStyle(
@@ -118,7 +125,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: GestureDetector(
           onTap: _onSettingsTap,
@@ -142,7 +149,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     Uri url = Uri.parse(link);
                     launchUrl(url);
                   } else {
-                    Navigator.of(context).pushNamed(link);
+                    context.router.pushPath(link);
                   }
                 }
               },

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
@@ -125,7 +126,7 @@ class CSVFilePicker {
 
   // Hide loading dialog
   static void hideLoading(BuildContext context) {
-    Navigator.of(context).pop();
+    context.router.pop();
   }
 
   // Show success message
@@ -142,7 +143,7 @@ class CSVFilePicker {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => context.router.pop(),
               child: const Text('OK'),
             ),
           ],

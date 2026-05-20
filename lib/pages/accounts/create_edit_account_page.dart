@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/accounts_provider.dart';
@@ -9,6 +10,7 @@ import '../../ui/device.dart';
 import '../../ui/extensions.dart';
 import 'widgets/confirm_account_deletion_dialog.dart';
 
+@RoutePage()
 class CreateEditAccountPage extends ConsumerStatefulWidget {
   const CreateEditAccountPage({super.key});
 
@@ -58,7 +60,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
         title: Text("${selectedAccount == null ? "New" : "Edit"} account"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
       ),
       persistentFooterDecoration: BoxDecoration(
@@ -112,7 +114,7 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                         startingValue: balanceController.text.toNum(),
                       );
                 }
-                if (context.mounted) Navigator.of(context).pop();
+                if (context.mounted) context.router.pop();
               },
               child: Text(
                 "${selectedAccount == null ? "CREATE" : "UPDATE"} ACCOUNT",
@@ -429,9 +431,8 @@ class _CreateEditAccountPage extends ConsumerState<CreateEditAccountPage> {
                               .whenComplete(() {
                                 if (context.mounted) {
                                   // Navigate back to the /account-list route.
-                                  Navigator.popUntil(
-                                    context,
-                                    ModalRoute.withName('/account-list'),
+                                  context.router.popUntilRouteWithPath(
+                                    '/account-list',
                                   );
                                 }
                               }),

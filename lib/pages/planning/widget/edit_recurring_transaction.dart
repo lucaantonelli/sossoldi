@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,16 +15,17 @@ import '../../transactions/create_transaction/widgets/details_list_disabled_tile
 import '../../transactions/create_transaction/widgets/label_list_tile.dart';
 import '../../transactions/create_transaction/widgets/recurrence_list_tile_edit.dart';
 
-class EditRecurringTransaction extends ConsumerStatefulWidget {
-  const EditRecurringTransaction({super.key});
+@RoutePage()
+class EditRecurringTransactionPage extends ConsumerStatefulWidget {
+  const EditRecurringTransactionPage({super.key});
 
   @override
-  ConsumerState<EditRecurringTransaction> createState() =>
-      _EditRecurringTransactionState();
+  ConsumerState<EditRecurringTransactionPage> createState() =>
+      _EditRecurringTransactionPageState();
 }
 
-class _EditRecurringTransactionState
-    extends ConsumerState<EditRecurringTransaction> {
+class _EditRecurringTransactionPageState
+    extends ConsumerState<EditRecurringTransactionPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
@@ -59,7 +61,7 @@ class _EditRecurringTransactionState
         title: const Text("Edit recurring transaction"),
         leadingWidth: 100,
         leading: TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
           child: const Text('Cancel'),
         ),
         actions: [
@@ -77,7 +79,7 @@ class _EditRecurringTransactionState
                       .delete(selectedRecurringTransaction.id!)
                       .whenComplete(() {
                         if (context.mounted) {
-                          Navigator.pop(context);
+                          context.router.pop();
                         }
                       });
                 },
@@ -196,7 +198,7 @@ class _EditRecurringTransactionState
                         )
                         .whenComplete(() {
                           if (context.mounted) {
-                            Navigator.of(context).pop();
+                            context.router.pop();
                           }
                         });
                   },

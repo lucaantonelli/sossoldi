@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,7 @@ import 'widgets/categories_tab.dart';
 import 'widgets/custom_sliver_delegate.dart';
 import 'widgets/list_tab.dart';
 
+@RoutePage()
 class TransactionsPage extends ConsumerStatefulWidget {
   const TransactionsPage({super.key});
 

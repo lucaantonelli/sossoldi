@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../routes/app_router.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/bank_account.dart';
 import '../../../../providers/accounts_provider.dart';
@@ -41,7 +43,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
               IconButton(
                 onPressed: () {
                   ref.invalidate(selectedAccountProvider);
-                  Navigator.of(context).pushNamed('/add-account');
+                  context.router.push(const CreateEditAccountRoute());
                 },
                 icon: const Icon(Icons.add_circle),
                 splashRadius: 28,
@@ -101,7 +103,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                                           )
                                           .setAccount(account);
                                     }
-                                    Navigator.pop(context);
+                                    context.router.pop();
                                   }
                                 : null,
                             child: Opacity(
@@ -182,7 +184,7 @@ class _AccountSelectorState extends ConsumerState<AccountSelector> {
                                     .read(selectedBankAccountProvider.notifier)
                                     .setAccount(account);
                               }
-                              Navigator.pop(context);
+                              context.router.pop();
                             },
                             enabled: enabled,
                             leading: RoundedIcon(

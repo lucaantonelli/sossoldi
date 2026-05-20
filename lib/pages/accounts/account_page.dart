@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ import '../../ui/formatters/decimal_text_input_formatter.dart';
 import '../../ui/device.dart';
 import '../../ui/snack_bars/transactions_snack_bars.dart';
 
+@RoutePage()
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
 
@@ -176,7 +178,7 @@ class _AccountPage extends ConsumerState<AccountPage> {
                                             account: account,
                                           );
                                       if (context.mounted) {
-                                        Navigator.of(context).pop();
+                                        context.router.pop();
                                       }
                                     }
                                   },

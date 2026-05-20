@@ -1,13 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/constants.dart';
+import '../../routes/app_router.dart';
 import '../../ui/widgets/default_card.dart';
 import '../../ui/widgets/rounded_icon.dart';
 import '../../model/bank_account.dart';
 import '../../providers/accounts_provider.dart';
 import '../../ui/device.dart';
 
+@RoutePage()
 class AccountListPage extends ConsumerStatefulWidget {
   const AccountListPage({super.key});
 
@@ -24,14 +27,14 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Accounts'),
         actions: [
           IconButton(
             onPressed: () {
               ref.read(accountsProvider.notifier).reset();
-              Navigator.of(context).pushNamed('/add-account');
+              context.router.push(const CreateEditAccountRoute());
             },
             icon: const Icon(Icons.add_circle),
             splashRadius: 28,
@@ -70,7 +73,7 @@ class _AccountListPage extends ConsumerState<AccountListPage> {
                         ref
                             .read(selectedAccountProvider.notifier)
                             .setAccount(account);
-                        Navigator.of(context).pushNamed('/add-account');
+                        context.router.push(const CreateEditAccountRoute());
                       },
                       child: Row(
                         spacing: Sizes.md,

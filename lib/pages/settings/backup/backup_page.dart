@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import '../../../services/csv/csv_file_picker.dart';
 import '../../../ui/snack_bars/snack_bar.dart';
 import '../../../ui/widgets/default_card.dart';
 
+@RoutePage()
 class BackupPage extends ConsumerStatefulWidget {
   const BackupPage({super.key});
 
@@ -124,7 +126,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Import/Export'),
       ),
@@ -148,14 +150,12 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
+                        onPressed: () => context.router.pop(),
                         child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          context.router.pop();
                           _handleImport();
                         },
                         child: const Text('Proceed with Import'),

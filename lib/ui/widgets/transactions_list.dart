@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import '../../constants/style.dart';
 import '../../model/transaction.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/transactions_provider.dart';
+import '../../routes/app_router.dart';
 import '../device.dart';
 import '../extensions.dart';
 import 'blur_widget.dart';
@@ -163,9 +165,8 @@ class TransactionTile extends ConsumerWidget {
               .transactionSelect(transaction)
               .whenComplete(() {
                 if (context.mounted) {
-                  Navigator.of(context).pushNamed(
-                    "/add-page",
-                    arguments: {'transaction': transaction},
+                  context.router.push(
+                    CreateTransactionRoute(transaction: transaction),
                   );
                 }
               });

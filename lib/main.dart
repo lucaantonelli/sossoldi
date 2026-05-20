@@ -10,7 +10,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'providers/settings_provider.dart';
 import 'providers/theme_provider.dart';
-import 'routes/routes.dart';
+import 'routes/app_router.dart';
 import 'services/database/repositories/recurring_transactions_repository.dart';
 import 'services/database/sossoldi_database.dart';
 import 'services/notifications/notifications_service.dart';
@@ -103,15 +103,15 @@ class Launcher extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appThemeState = ref.watch(appThemeStateProvider);
     final bool isOnboardingCompleted = ref.watch(onBoardingCompletedProvider);
-    return MaterialApp(
+    final appRouter = AppRouter(isOnboardingCompleted: isOnboardingCompleted);
+    return MaterialApp.router(
       title: 'Sossoldi',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeState.isDarkModeEnabled
           ? ThemeMode.dark
           : ThemeMode.light,
-      onGenerateRoute: makeRoute,
-      initialRoute: !isOnboardingCompleted ? '/onboarding' : '/',
+      routerConfig: appRouter.config(),
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/transaction.dart';
 import '../../providers/transactions_provider.dart';
+import '../../routes/app_router.dart';
 import 'snack_bar.dart';
 
 void showDuplicatedTransactionSnackBar(
@@ -18,7 +20,7 @@ void showDuplicatedTransactionSnackBar(
               .read(transactionsProvider.notifier)
               .transactionSelect(transaction);
           if (context.mounted) {
-            Navigator.of(context).pushNamed("/add-page");
+            context.router.push(CreateTransactionRoute());
           }
         }
       : null,

@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   analyzer_plugin: ^0.13.1
+  auto_route: ^11.1.0
   collection: ^1.19.1
   csv: ^6.0.0
   cupertino_icons: ^1.0.8
@@ -23,6 +24,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   flutter_phoenix: ^1.1.1
   flutter_riverpod: ^3.1.0
+  font_awesome_flutter: ^10.12.0
   intl: ^0.20.2
   local_auth: ^3.0.0
   package_info_plus: ^9.0.0
@@ -37,12 +39,12 @@ dependencies:
   sqlite3_flutter_libs:
   timezone: ^0.10.1
   url_launcher: ^6.3.2
-  font_awesome_flutter: ^10.12.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  auto_route_generator: ^10.4.0
   build_runner: ^2.10.5
   dependency_validator: ^5.0.3
   flutter_launcher_icons: ^0.14.4

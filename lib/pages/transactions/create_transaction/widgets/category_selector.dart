@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/style.dart';
+import '../../../../routes/app_router.dart';
 import '../../../../ui/widgets/rounded_icon.dart';
 import '../../../../model/category_transaction.dart';
 import '../../../../providers/categories_provider.dart';
@@ -21,7 +23,7 @@ class CategorySelector extends ConsumerStatefulWidget {
 class _CategorySelectorState extends ConsumerState<CategorySelector> {
   void _selectCategory(BuildContext context, CategoryTransaction category) {
     ref.read(selectedCategoryProvider.notifier).setCategory(category);
-    // Navigator.pop(context);
+    // context.router.pop();
   }
 
   @override
@@ -44,8 +46,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
             title: const Text("Category"),
             actions: [
               IconButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/add-category'),
+                onPressed: () => context.router.push(CreateEditCategoryRoute()),
                 icon: const Icon(Icons.add_circle),
                 splashRadius: 28,
               ),

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,9 +8,11 @@ import '../../../../providers/categories_provider.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_card.dart';
 import '../../../ui/widgets/rounded_icon.dart';
+import '../../routes/app_router.dart';
 
-class CategoryList extends ConsumerWidget {
-  const CategoryList({super.key});
+@RoutePage()
+class CategoryListPage extends ConsumerWidget {
+  const CategoryListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,14 +22,14 @@ class CategoryList extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
         ),
         title: const Text('Categories'),
         actions: [
           IconButton(
             onPressed: () {
               ref.invalidate(selectedCategoryProvider);
-              Navigator.of(context).pushNamed('/add-category');
+              context.router.push(CreateEditCategoryRoute());
             },
             icon: const Icon(Icons.add_circle),
             splashRadius: 28,
@@ -65,7 +68,7 @@ class CategoryList extends ConsumerWidget {
                         ref
                             .read(selectedCategoryProvider.notifier)
                             .setCategory(category);
-                        Navigator.of(context).pushNamed('/add-category');
+                        context.router.push(CreateEditCategoryRoute());
                       },
                       child: Row(
                         spacing: Sizes.md,

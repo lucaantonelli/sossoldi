@@ -1,24 +1,27 @@
 // Defines application's structure
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/settings_provider.dart';
 import '../providers/transactions_provider.dart';
+import '../routes/app_router.dart';
 import '../ui/device.dart';
 import 'graphs/graphs_page.dart';
 import 'dashboard/dashboard_page.dart';
 import 'planning/planning_page.dart';
 import 'transactions/transactions_page.dart';
 
-class Structure extends ConsumerStatefulWidget {
-  const Structure({super.key});
+@RoutePage()
+class StructurePage extends ConsumerStatefulWidget {
+  const StructurePage({super.key});
 
   @override
-  ConsumerState<Structure> createState() => _StructureState();
+  ConsumerState<StructurePage> createState() => _StructureState();
 }
 
-class _StructureState extends ConsumerState<Structure> {
+class _StructureState extends ConsumerState<StructurePage> {
   // We could add this List in the app's state, so it isn't intialized every time.
   final List<String> _pagesTitle = [
     "Dashboard",
@@ -55,7 +58,7 @@ class _StructureState extends ConsumerState<Structure> {
         leading: Padding(
           padding: const EdgeInsets.only(left: Sizes.lg),
           child: FilledButton(
-            onPressed: () => Navigator.of(context).pushNamed('/search'),
+            onPressed: () => context.router.push(const SearchRoute()),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
             child: const Icon(Icons.search),
           ),
@@ -74,7 +77,7 @@ class _StructureState extends ConsumerState<Structure> {
             _ => const SizedBox.shrink(),
           },
           FilledButton(
-            onPressed: () => Navigator.of(context).pushNamed('/settings'),
+            onPressed: () => context.router.push(const SettingsRoute()),
             style: FilledButton.styleFrom(shape: const CircleBorder()),
             child: const Icon(Icons.settings),
           ),
@@ -131,7 +134,7 @@ class _StructureState extends ConsumerState<Structure> {
         ),
         onPressed: () {
           ref.read(transactionsProvider.notifier).reset();
-          Navigator.of(context).pushNamed("/add-page");
+          context.router.push(CreateTransactionRoute());
         },
       ),
       floatingActionButtonLocation:

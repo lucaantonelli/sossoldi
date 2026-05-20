@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -154,7 +155,7 @@ class EndDateSelector extends ConsumerWidget {
             title: const Text("Never"),
             onTap: () {
               ref.read(endDateProvider.notifier).setDate(null);
-              Navigator.pop(context);
+              context.router.pop();
             },
           ),
           ListTile(

@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/style.dart';
+import '../../../routes/app_router.dart';
 import '../../../ui/assets.dart';
 import '../../../ui/device.dart';
 import '../../../ui/widgets/default_container.dart';
@@ -57,7 +59,7 @@ class AddTransactionCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: Sizes.md),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed("/add-page");
+                  context.router.push(CreateTransactionRoute());
                 },
               ),
             ),

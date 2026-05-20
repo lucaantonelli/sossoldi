@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constants/style.dart';
@@ -7,9 +8,9 @@ import '../../../providers/budgets_provider.dart';
 import '../../../ui/device.dart';
 
 class AddBudget extends ConsumerStatefulWidget {
-  final CategoryTransaction category;
-
   const AddBudget(this.category, {super.key});
+
+  final CategoryTransaction category;
 
   @override
   ConsumerState<AddBudget> createState() => _AddBudgetState();
@@ -64,7 +65,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.router.pop(),
           child: Text('CANCEL', style: Theme.of(context).textTheme.bodyMedium),
         ),
         ElevatedButton(
@@ -82,7 +83,7 @@ class _AddBudgetState extends ConsumerState<AddBudget> {
                 )
                 .whenComplete(() {
                   if (context.mounted) {
-                    Navigator.pop(context);
+                    context.router.pop();
                   }
                 });
           },

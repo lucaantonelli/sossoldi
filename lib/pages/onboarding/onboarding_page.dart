@@ -1,17 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import '../../routes/app_router.dart';
 import '../../ui/assets.dart';
 import '../../ui/device.dart';
-import 'widgets/budget_setup.dart';
 import '/constants/style.dart';
 
-class Onboarding extends StatefulWidget {
-  const Onboarding({super.key});
+@RoutePage()
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
 
   @override
-  State<Onboarding> createState() => _OnboardingState();
+  State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _OnboardingState extends State<Onboarding> {
+class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,12 +55,7 @@ class _OnboardingState extends State<Onboarding> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BudgetSetup(),
-                    ),
-                  );
+                  context.router.push(const BudgetSetupRoute());
                 },
                 child: const Center(child: Text('START THE SET UP')),
               ),
